@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">HeaL</string>
+    <string name="map" />
+    <string name="dial" />
+    <string name="mail" />
+    <string name="notifications_title" />
+    <string name="home_title" />
 </resources>
