@@ -5,4 +5,9 @@
     <string name="mail" />
     <string name="notifications_title" />
     <string name="home_title" />
+    <string name="dashboard">dashboard</string>
+    <string name="home">home</string>
+    <string name="notifications">notifications</string>
+    <string name="account">\n</string>
+    <string name="food">\n\n</string>
 </resources>
