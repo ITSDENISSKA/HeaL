@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -28,6 +31,8 @@ import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -46,6 +51,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        FoodFragment foodFragment = new FoodFragment();
+        MainFragment mainFragment = new MainFragment();
+        AccountFragment accountFragment = new AccountFragment();
+
+
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_food:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            foodFragment).commit();
+                    return true;
+                case R.id.nav_home:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            accountFragment).commit();
+                    return true;
+                case R.id.nav_account:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            mainFragment).commit();
+                    return true;
+                default:
+                    return false;
+            }
+        });
 
         PieChart mobilityPieChart = findViewById(R.id.mobility_pie_chart);
         mobilityPieChart.setDragDecelerationFrictionCoef(1f);
@@ -112,29 +144,8 @@ public class MainActivity extends AppCompatActivity {
         receivePieChart.setCenterTextSize(50f);
         receivePieChart.animateY(1500, Easing.EaseInOutQuad);
 
-        MainActivity main_fragment = new MainActivity();
-        FoodActivity food_fragment = new FoodActivity();
-        AccountActivity account_fragment = new AccountActivity();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.nav_food:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            food_fragment).commit();
-                    return true;
-                case R.id.nav_home:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            main_fragment).commit();
-                    return true;
-                case R.id.nav_account:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            account_fragment).commit();
-                    return true;
-                default:
-                    return false;
-            }
-        });
+
         // Устанавливаем интервал времени для запроса данных за день
         Calendar cal = Calendar.getInstance();
         Date now = new Date();
@@ -173,6 +184,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, main_fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
     }
 }
