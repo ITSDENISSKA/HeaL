@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -68,122 +69,122 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.nav_home:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            accountFragment).commit();
+                            mainFragment).commit();
                     return true;
                 case R.id.nav_account:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            mainFragment).commit();
+                            accountFragment).commit();
                     return true;
                 default:
                     return false;
             }
         });
 
-        PieChart mobilityPieChart = findViewById(R.id.mobility_pie_chart);
-        mobilityPieChart.setDragDecelerationFrictionCoef(1f);
-
-        ArrayList<PieEntry> mobilityEntries = new ArrayList<>();
-        mobilityEntries.add(new PieEntry(75f, "Потрачено"));
-        mobilityEntries.add(new PieEntry(25f, "Осталось"));
-
-        PieDataSet mobilityDataSet = new PieDataSet(mobilityEntries, "Label");
-        mobilityDataSet.setSliceSpace(5f);
-        mobilityDataSet.setSelectionShift(0f);
-        mobilityDataSet.setValueTextSize(12f);
-        mobilityDataSet.setValueTextColor(Color.TRANSPARENT);
-
-        int[] mobilityColor = {Color.rgb(170, 51, 78), Color.rgb(233, 157, 174)};
-
-        mobilityDataSet.setColors(mobilityColor);
-
-        PieData mobilityData = new PieData(mobilityDataSet);
-
-        mobilityPieChart.setData(mobilityData);
-        mobilityPieChart.setUsePercentValues(false);
-        mobilityPieChart.setHoleRadius(75f);
-        mobilityPieChart.setTransparentCircleRadius(100f);
-        mobilityPieChart.getDescription().setEnabled(false);
-        mobilityPieChart.setDrawEntryLabels(false);
-        mobilityPieChart.getLegend().setEnabled(false);
-        mobilityPieChart.setEntryLabelTextSize(20f);
-        mobilityPieChart.setDrawCenterText(true);
-//        mobilityPieChart.setCenterText("1020");
-        mobilityPieChart.setCenterTextSize(50f);
-        mobilityPieChart.animateY(1500, Easing.EaseInOutQuad);
-
-        PieChart receivePieChart = findViewById(R.id.receive_pie_chart);
-        receivePieChart.setDragDecelerationFrictionCoef(1f);
-
-        ArrayList<PieEntry> receiveEntries = new ArrayList<>();
-        receiveEntries.add(new PieEntry(60f, "Приобрёл"));
-        receiveEntries.add(new PieEntry(40f, "Осталось"));
-
-        PieDataSet receiveDataSet = new PieDataSet(receiveEntries, "Label");
-        receiveDataSet.setSliceSpace(5f);
-        receiveDataSet.setSelectionShift(0f);
-
-        receiveDataSet.setValueTextSize(12f);
-        receiveDataSet.setValueTextColor(Color.TRANSPARENT);
-        int[] receiveColor = {Color.rgb(0, 150, 0), Color.rgb(0, 255, 0)};
-
-        receiveDataSet.setColors(receiveColor);
-
-
-        PieData receiveData = new PieData(receiveDataSet);
-
-        receivePieChart.setData(receiveData);
-        receivePieChart.setUsePercentValues(false);
-        receivePieChart.setHoleRadius(65f);
-        receivePieChart.setTransparentCircleRadius(100f);
-        receivePieChart.getDescription().setEnabled(false);
-        receivePieChart.setDrawEntryLabels(false);
-        receivePieChart.getLegend().setEnabled(false);
-        receivePieChart.setEntryLabelTextSize(20f);
-        receivePieChart.setDrawCenterText(true);
-//        receivePieChart.setCenterText("1020");
-        receivePieChart.setCenterTextSize(50f);
-        receivePieChart.animateY(1500, Easing.EaseInOutQuad);
-
-
-
-        // Устанавливаем интервал времени для запроса данных за день
-        Calendar cal = Calendar.getInstance();
-        Date now = new Date();
-        cal.setTime(now);
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.DAY_OF_YEAR, -1);
-        long startTime = cal.getTimeInMillis();
+//        PieChart mobilityPieChart = findViewById(R.id.mobility_pie_chart);
+//        mobilityPieChart.setDragDecelerationFrictionCoef(1f);
+//
+//        ArrayList<PieEntry> mobilityEntries = new ArrayList<>();
+//        mobilityEntries.add(new PieEntry(75f, "Потрачено"));
+//        mobilityEntries.add(new PieEntry(25f, "Осталось"));
+//
+//        PieDataSet mobilityDataSet = new PieDataSet(mobilityEntries, "Label");
+//        mobilityDataSet.setSliceSpace(5f);
+//        mobilityDataSet.setSelectionShift(0f);
+//        mobilityDataSet.setValueTextSize(12f);
+//        mobilityDataSet.setValueTextColor(Color.TRANSPARENT);
+//
+//        int[] mobilityColor = {Color.rgb(170, 51, 78), Color.rgb(233, 157, 174)};
+//
+//        mobilityDataSet.setColors(mobilityColor);
+//
+//        PieData mobilityData = new PieData(mobilityDataSet);
+//
+//        mobilityPieChart.setData(mobilityData);
+//        mobilityPieChart.setUsePercentValues(false);
+//        mobilityPieChart.setHoleRadius(75f);
+//        mobilityPieChart.setTransparentCircleRadius(100f);
+//        mobilityPieChart.getDescription().setEnabled(false);
+//        mobilityPieChart.setDrawEntryLabels(false);
+//        mobilityPieChart.getLegend().setEnabled(false);
+//        mobilityPieChart.setEntryLabelTextSize(20f);
+//        mobilityPieChart.setDrawCenterText(true);
+////        mobilityPieChart.setCenterText("1020");
+//        mobilityPieChart.setCenterTextSize(50f);
+//        mobilityPieChart.animateY(1500, Easing.EaseInOutQuad);
+//
+//        PieChart receivePieChart = findViewById(R.id.receive_pie_chart);
+//        receivePieChart.setDragDecelerationFrictionCoef(1f);
+//
+//        ArrayList<PieEntry> receiveEntries = new ArrayList<>();
+//        receiveEntries.add(new PieEntry(60f, "Приобрёл"));
+//        receiveEntries.add(new PieEntry(40f, "Осталось"));
+//
+//        PieDataSet receiveDataSet = new PieDataSet(receiveEntries, "Label");
+//        receiveDataSet.setSliceSpace(5f);
+//        receiveDataSet.setSelectionShift(0f);
+//
+//        receiveDataSet.setValueTextSize(12f);
+//        receiveDataSet.setValueTextColor(Color.TRANSPARENT);
+//        int[] receiveColor = {Color.rgb(0, 150, 0), Color.rgb(0, 255, 0)};
+//
+//        receiveDataSet.setColors(receiveColor);
+//
+//
+//        PieData receiveData = new PieData(receiveDataSet);
+//
+//        receivePieChart.setData(receiveData);
+//        receivePieChart.setUsePercentValues(false);
+//        receivePieChart.setHoleRadius(65f);
+//        receivePieChart.setTransparentCircleRadius(100f);
+//        receivePieChart.getDescription().setEnabled(false);
+//        receivePieChart.setDrawEntryLabels(false);
+//        receivePieChart.getLegend().setEnabled(false);
+//        receivePieChart.setEntryLabelTextSize(20f);
+//        receivePieChart.setDrawCenterText(true);
+////        receivePieChart.setCenterText("1020");
+//        receivePieChart.setCenterTextSize(50f);
+//        receivePieChart.animateY(1500, Easing.EaseInOutQuad);
+//
+//
+//
+//        // Устанавливаем интервал времени для запроса данных за день
+//        Calendar cal = Calendar.getInstance();
+//        Date now = new Date();
+//        cal.setTime(now);
+//        long endTime = cal.getTimeInMillis();
+//        cal.add(Calendar.DAY_OF_YEAR, -1);
+//        long startTime = cal.getTimeInMillis();
 
         // Создаем запрос на чтение данных
-        DataReadRequest readRequest = new DataReadRequest.Builder().aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY).bucketByTime(1, TimeUnit.DAYS).setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS).build();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
-            Fitness.getHistoryClient(this, account).readData(readRequest).addOnCompleteListener(new OnCompleteListener<DataReadResponse>() {
-                @Override
-                public void onComplete(@NonNull Task<DataReadResponse> task) {
-                    if (task.isSuccessful()) {
-                        DataReadResponse result = task.getResult();
-                        if (result != null && result.getBuckets().size() > 0) {
-                            // Обработка полученных данных
-                            for (Bucket bucket : result.getBuckets()) {
-                                List<DataSet> dataSets = bucket.getDataSets();
-                                for (DataSet dataSet : dataSets) {
-                                    for (DataPoint dp : dataSet.getDataPoints()) {
-                                        // Получение данных о подвижности (название, время начала, время окончания)
-                                        String activityName = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
-                                        long startTime = dp.getStartTime(TimeUnit.MILLISECONDS);
-                                        long endTime = dp.getEndTime(TimeUnit.MILLISECONDS);
-                                        Log.d(TAG, "Activity: " + activityName + ", Start: " + startTime + ", End: " + endTime);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        Log.e(TAG, "Failed to read data.");
-                    }
-                }
-            });
-        }
+//        DataReadRequest readRequest = new DataReadRequest.Builder().aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY).bucketByTime(1, TimeUnit.DAYS).setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS).build();
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        if (account != null) {
+//            Fitness.getHistoryClient(this, account).readData(readRequest).addOnCompleteListener(new OnCompleteListener<DataReadResponse>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DataReadResponse> task) {
+//                    if (task.isSuccessful()) {
+//                        DataReadResponse result = task.getResult();
+//                        if (result != null && result.getBuckets().size() > 0) {
+//                            // Обработка полученных данных
+//                            for (Bucket bucket : result.getBuckets()) {
+//                                List<DataSet> dataSets = bucket.getDataSets();
+//                                for (DataSet dataSet : dataSets) {
+//                                    for (DataPoint dp : dataSet.getDataPoints()) {
+//                                        // Получение данных о подвижности (название, время начала, время окончания)
+//                                        String activityName = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
+//                                        long startTime = dp.getStartTime(TimeUnit.MILLISECONDS);
+//                                        long endTime = dp.getEndTime(TimeUnit.MILLISECONDS);
+//                                        Log.d(TAG, "Activity: " + activityName + ", Start: " + startTime + ", End: " + endTime);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        Log.e(TAG, "Failed to read data.");
+//                    }
+//                }
+//            });
+//        }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
     }
 }
