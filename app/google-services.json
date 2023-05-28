@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "366482708511",
+    "project_id": "heal-3724e",
+    "storage_bucket": "heal-3724e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366482708511:android:5b262388256635d832dd2a",
+        "android_client_info": {
+          "package_name": "com.example.heal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW8Hgd6YdpT5IPBmiEj6qD9ExN35uM5fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

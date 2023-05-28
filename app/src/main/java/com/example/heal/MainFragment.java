@@ -1,43 +1,20 @@
 package com.example.heal;
 
-import static android.content.ContentValues.TAG;
-
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.data.Bucket;
-import com.google.android.gms.fitness.data.DataPoint;
-import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.result.DataReadResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 public class MainFragment extends Fragment {
@@ -48,48 +25,71 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        pieChart = view.findViewById(R.id.pie_chart);
 
-        // Настройка PieChart
-        setupPieChart();
+        PieChart mobilityPieChart = view.findViewById(R.id.mobility_pie_chart);
+        mobilityPieChart.setDragDecelerationFrictionCoef(1f);
 
-        // Добавление данных в PieChart
-        addDataToPieChart();
+        ArrayList<PieEntry> mobilityEntries = new ArrayList<>();
+        mobilityEntries.add(new PieEntry(75f, "Потрачено"));
+        mobilityEntries.add(new PieEntry(25f, "Осталось"));
+
+        PieDataSet mobilityDataSet = new PieDataSet(mobilityEntries, "Label");
+        mobilityDataSet.setSliceSpace(5f);
+        mobilityDataSet.setSelectionShift(0f);
+        mobilityDataSet.setValueTextSize(12f);
+        mobilityDataSet.setValueTextColor(Color.TRANSPARENT);
+
+        int[] mobilityColor = {Color.rgb(170, 51, 78), Color.rgb(233, 157, 174)};
+
+        mobilityDataSet.setColors(mobilityColor);
+
+        PieData mobilityData = new PieData(mobilityDataSet);
+
+        mobilityPieChart.setData(mobilityData);
+        mobilityPieChart.setUsePercentValues(false);
+        mobilityPieChart.setHoleRadius(75f);
+        mobilityPieChart.setTransparentCircleRadius(100f);
+        mobilityPieChart.getDescription().setEnabled(false);
+        mobilityPieChart.setDrawEntryLabels(false);
+        mobilityPieChart.getLegend().setEnabled(false);
+        mobilityPieChart.setEntryLabelTextSize(20f);
+        mobilityPieChart.setDrawCenterText(true);
+        mobilityPieChart.setCenterTextSize(50f);
+        mobilityPieChart.animateY(1500, Easing.EaseInOutQuad);
+
+        PieChart receivePieChart = view.findViewById(R.id.receive_pie_chart);
+        receivePieChart.setDragDecelerationFrictionCoef(1f);
+
+        ArrayList<PieEntry> receiveEntries = new ArrayList<>();
+        receiveEntries.add(new PieEntry(60f, "Приобрёл"));
+        receiveEntries.add(new PieEntry(40f, "Осталось"));
+
+        PieDataSet receiveDataSet = new PieDataSet(receiveEntries, "Label");
+        receiveDataSet.setSliceSpace(5f);
+        receiveDataSet.setSelectionShift(0f);
+
+        receiveDataSet.setValueTextSize(12f);
+        receiveDataSet.setValueTextColor(Color.TRANSPARENT);
+        int[] receiveColor = {Color.rgb(0, 150, 0), Color.rgb(0, 255, 0)};
+
+        receiveDataSet.setColors(receiveColor);
+
+
+        PieData receiveData = new PieData(receiveDataSet);
+
+        receivePieChart.setData(receiveData);
+        receivePieChart.setUsePercentValues(false);
+        receivePieChart.setHoleRadius(65f);
+        receivePieChart.setTransparentCircleRadius(100f);
+        receivePieChart.getDescription().setEnabled(false);
+        receivePieChart.setDrawEntryLabels(false);
+        receivePieChart.getLegend().setEnabled(false);
+        receivePieChart.setEntryLabelTextSize(20f);
+        receivePieChart.setDrawCenterText(true);
+        receivePieChart.setCenterTextSize(50f);
+        receivePieChart.animateY(1500, Easing.EaseInOutQuad);
+
 
         return view;
-    }
-
-    private void setupPieChart() {
-        // Настройка параметров PieChart
-        pieChart.setUsePercentValues(true);
-        pieChart.getDescription().setEnabled(false);
-        pieChart.setExtraOffsets(5, 10, 5, 5);
-        pieChart.setDragDecelerationFrictionCoef(0.95f);
-        pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleColor(Color.WHITE);
-        pieChart.setTransparentCircleRadius(61f);
-        pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.setEntryLabelTextSize(12f);
-    }
-
-    private void addDataToPieChart() {
-        ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(25f, "Category 1"));
-        entries.add(new PieEntry(20f, "Category 2"));
-        entries.add(new PieEntry(15f, "Category 3"));
-        entries.add(new PieEntry(10f, "Category 4"));
-        entries.add(new PieEntry(30f, "Category 5"));
-
-        PieDataSet dataSet = new PieDataSet(entries, "Categories");
-        dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-
-        PieData data = new PieData(dataSet);
-        data.setValueTextSize(10f);
-        data.setValueTextColor(Color.BLACK);
-
-        pieChart.setData(data);
-        pieChart.animateY(1000);
     }
 }

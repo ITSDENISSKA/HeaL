@@ -1,190 +1,114 @@
 package com.example.heal;
 
-import static android.content.ContentValues.TAG;
-
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.data.Bucket;
-import com.google.android.gms.fitness.data.DataPoint;
-import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.result.DataReadResponse;
-import com.google.android.gms.fitness.result.DataReadResult;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
+// MainActivity.java
 public class MainActivity extends AppCompatActivity {
+    private String currentUsername;
+    private boolean isLoggedIn = false;
+    private BottomNavigationView bottomNavigationView;
+    private AccountFragment accountFragment;
+    private RegisterFragment registerFragment;
+    private MainFragment mainFragment;
+    private FoodFragment foodFragment;
 
-    private PieChartView pieChartView;
-
+    private MyDatabaseHelper databaseHelper;
+    private int selectedNavItem; // Переменная для сохранения выбранного элемента в BottomNavigationView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Инициализация фрагментов
+        mainFragment = new MainFragment();
+        foodFragment = new FoodFragment();
+        accountFragment = new AccountFragment();
+        registerFragment = new RegisterFragment();
+        databaseHelper = new MyDatabaseHelper(getApplicationContext());
 
-        FoodFragment foodFragment = new FoodFragment();
-        MainFragment mainFragment = new MainFragment();
-        AccountFragment accountFragment = new AccountFragment();
-
-
-
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_food:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            foodFragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, foodFragment)
+                            .commit();
+                    selectedNavItem = R.id.nav_food; // Сохраняем выбранный элемент
                     return true;
                 case R.id.nav_home:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            mainFragment).commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, mainFragment)
+                            .commit();
+                    selectedNavItem = R.id.nav_home; // Сохраняем выбранный элемент
                     return true;
                 case R.id.nav_account:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            accountFragment).commit();
+                    if (isLoggedIn) {
+                        // Получение данных о пользователе из базы данных
+                        User user = databaseHelper.getUser(currentUsername); // Замените "username" на имя пользователя, которое вы хотите получить
+
+                        // Проверка на null, чтобы избежать NullPointerException
+                        if (user != null) {
+                            // Создание экземпляра фрагмента аккаунта с передачей данных пользователя
+                            AccountFragment accountFragment = AccountFragment.newInstance(user.getUsername(), user.getPassword(), user.getRegistrationDate());
+
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.fragment_container, accountFragment)
+                                    .commit();
+                            return true;
+                        } else {
+                            Toast.makeText(this, "Пользователь не найден", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, registerFragment)
+                                .commit();
+                    }
+
+
+                    selectedNavItem = R.id.nav_account; // Сохраняем выбранный элемент
                     return true;
                 default:
                     return false;
             }
         });
 
-//        PieChart mobilityPieChart = findViewById(R.id.mobility_pie_chart);
-//        mobilityPieChart.setDragDecelerationFrictionCoef(1f);
-//
-//        ArrayList<PieEntry> mobilityEntries = new ArrayList<>();
-//        mobilityEntries.add(new PieEntry(75f, "Потрачено"));
-//        mobilityEntries.add(new PieEntry(25f, "Осталось"));
-//
-//        PieDataSet mobilityDataSet = new PieDataSet(mobilityEntries, "Label");
-//        mobilityDataSet.setSliceSpace(5f);
-//        mobilityDataSet.setSelectionShift(0f);
-//        mobilityDataSet.setValueTextSize(12f);
-//        mobilityDataSet.setValueTextColor(Color.TRANSPARENT);
-//
-//        int[] mobilityColor = {Color.rgb(170, 51, 78), Color.rgb(233, 157, 174)};
-//
-//        mobilityDataSet.setColors(mobilityColor);
-//
-//        PieData mobilityData = new PieData(mobilityDataSet);
-//
-//        mobilityPieChart.setData(mobilityData);
-//        mobilityPieChart.setUsePercentValues(false);
-//        mobilityPieChart.setHoleRadius(75f);
-//        mobilityPieChart.setTransparentCircleRadius(100f);
-//        mobilityPieChart.getDescription().setEnabled(false);
-//        mobilityPieChart.setDrawEntryLabels(false);
-//        mobilityPieChart.getLegend().setEnabled(false);
-//        mobilityPieChart.setEntryLabelTextSize(20f);
-//        mobilityPieChart.setDrawCenterText(true);
-////        mobilityPieChart.setCenterText("1020");
-//        mobilityPieChart.setCenterTextSize(50f);
-//        mobilityPieChart.animateY(1500, Easing.EaseInOutQuad);
-//
-//        PieChart receivePieChart = findViewById(R.id.receive_pie_chart);
-//        receivePieChart.setDragDecelerationFrictionCoef(1f);
-//
-//        ArrayList<PieEntry> receiveEntries = new ArrayList<>();
-//        receiveEntries.add(new PieEntry(60f, "Приобрёл"));
-//        receiveEntries.add(new PieEntry(40f, "Осталось"));
-//
-//        PieDataSet receiveDataSet = new PieDataSet(receiveEntries, "Label");
-//        receiveDataSet.setSliceSpace(5f);
-//        receiveDataSet.setSelectionShift(0f);
-//
-//        receiveDataSet.setValueTextSize(12f);
-//        receiveDataSet.setValueTextColor(Color.TRANSPARENT);
-//        int[] receiveColor = {Color.rgb(0, 150, 0), Color.rgb(0, 255, 0)};
-//
-//        receiveDataSet.setColors(receiveColor);
-//
-//
-//        PieData receiveData = new PieData(receiveDataSet);
-//
-//        receivePieChart.setData(receiveData);
-//        receivePieChart.setUsePercentValues(false);
-//        receivePieChart.setHoleRadius(65f);
-//        receivePieChart.setTransparentCircleRadius(100f);
-//        receivePieChart.getDescription().setEnabled(false);
-//        receivePieChart.setDrawEntryLabels(false);
-//        receivePieChart.getLegend().setEnabled(false);
-//        receivePieChart.setEntryLabelTextSize(20f);
-//        receivePieChart.setDrawCenterText(true);
-////        receivePieChart.setCenterText("1020");
-//        receivePieChart.setCenterTextSize(50f);
-//        receivePieChart.animateY(1500, Easing.EaseInOutQuad);
-//
-//
-//
-//        // Устанавливаем интервал времени для запроса данных за день
-//        Calendar cal = Calendar.getInstance();
-//        Date now = new Date();
-//        cal.setTime(now);
-//        long endTime = cal.getTimeInMillis();
-//        cal.add(Calendar.DAY_OF_YEAR, -1);
-//        long startTime = cal.getTimeInMillis();
+        // Загрузка начального фрагмента
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, mainFragment)
+                .commit();
+        selectedNavItem = R.id.nav_home; // Устанавливаем начальный выбранный элемент
 
-        // Создаем запрос на чтение данных
-//        DataReadRequest readRequest = new DataReadRequest.Builder().aggregate(DataType.TYPE_ACTIVITY_SEGMENT, DataType.AGGREGATE_ACTIVITY_SUMMARY).bucketByTime(1, TimeUnit.DAYS).setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS).build();
-//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-//        if (account != null) {
-//            Fitness.getHistoryClient(this, account).readData(readRequest).addOnCompleteListener(new OnCompleteListener<DataReadResponse>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DataReadResponse> task) {
-//                    if (task.isSuccessful()) {
-//                        DataReadResponse result = task.getResult();
-//                        if (result != null && result.getBuckets().size() > 0) {
-//                            // Обработка полученных данных
-//                            for (Bucket bucket : result.getBuckets()) {
-//                                List<DataSet> dataSets = bucket.getDataSets();
-//                                for (DataSet dataSet : dataSets) {
-//                                    for (DataPoint dp : dataSet.getDataPoints()) {
-//                                        // Получение данных о подвижности (название, время начала, время окончания)
-//                                        String activityName = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
-//                                        long startTime = dp.getStartTime(TimeUnit.MILLISECONDS);
-//                                        long endTime = dp.getEndTime(TimeUnit.MILLISECONDS);
-//                                        Log.d(TAG, "Activity: " + activityName + ", Start: " + startTime + ", End: " + endTime);
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    } else {
-//                        Log.e(TAG, "Failed to read data.");
-//                    }
-//                }
-//            });
-//        }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
+        // Восстановление состояния выбранного элемента при пересоздании активности
+        if (savedInstanceState != null) {
+            selectedNavItem = savedInstanceState.getInt("selectedNavItem", R.id.nav_home);
+            bottomNavigationView.setSelectedItemId(selectedNavItem);
+        }
+    }
+
+
+    // Метод для установки состояния входа в аккаунт
+    public void setLoggedIn(boolean isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("selectedNavItem", selectedNavItem); // Сохранение состояния выбранного элемента
+    }
+
+    public String getCurrentUsername() {
+        return currentUsername;
+    }
+
+    public void setCurrentUsername(String username) {
+        this.currentUsername = username;
     }
 }
