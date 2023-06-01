@@ -12,4 +12,14 @@
     <string name="food">\n\n</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="server_client_id">366482708511-d6e7futa1umd1ebu4i42c0t1s3php1v8.apps.googleusercontent.com</string>
+    <string name="client_secret">{\"installed\":{\"client_id\":\"366482708511-d6e7futa1umd1ebu4i42c0t1s3php1v8.apps.googleusercontent.com\",\"project_id\":\"heal-3724e\",\"auth_uri\":\"https://accounts.google.com/o/oauth2/auth\",\"token_uri\":\"https://oauth2.googleapis.com/token\",\"auth_provider_x509_cert_url\":\"https://www.googleapis.com/oauth2/v1/certs\"}}\n</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_in">Login in</string>
+    <string name="register">Register</string>
+    <string name="register_account">Register account</string>
+    <string name="click_to_login">Click to login</string>
+    <string name="click_to_register">Click to register</string>
 </resources>
