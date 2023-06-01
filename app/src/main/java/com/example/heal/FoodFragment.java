@@ -13,14 +13,14 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+
+import com.example.heal.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FoodFragment extends Fragment {
 
-    private FoodViewModel foodViewModel;
     private List<String> foodList;
     private ArrayAdapter<String> adapter;
 
@@ -38,14 +38,12 @@ public class FoodFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        foodViewModel = new ViewModelProvider(requireActivity()).get(FoodViewModel.class);
-
         editTextFoodName = view.findViewById(R.id.editTextFoodName);
         editTextCalories = view.findViewById(R.id.editTextCalories);
         addButton = view.findViewById(R.id.buttonAdd);
         listViewFood = view.findViewById(R.id.listViewFood);
 
-        foodList = foodViewModel.getFoodList();
+        foodList = new ArrayList<>();
         adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, foodList);
         listViewFood.setAdapter(adapter);
 
@@ -71,11 +69,5 @@ public class FoodFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        foodViewModel.setFoodList(foodList);
     }
 }
