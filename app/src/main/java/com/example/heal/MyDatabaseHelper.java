@@ -20,6 +20,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_REGISTRATION_DATE = "registration_date";
 
+
     public MyDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -66,6 +67,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return user;
     }
+
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
 
@@ -88,6 +90,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return userList;
+
+    }
+
+    public boolean addFood(String foodName, int parseInt) {
+        return false;
     }
 }
+
 

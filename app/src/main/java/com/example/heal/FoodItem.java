@@ -2,9 +2,9 @@ package com.example.heal;
 
 public class FoodItem {
     private String name;
-    private int calories;
+    private String calories;
 
-    public FoodItem(String name, int calories) {
+    public FoodItem(String name, String calories) {
         this.name = name;
         this.calories = calories;
     }
@@ -13,7 +13,7 @@ public class FoodItem {
         return name;
     }
 
-    public int getCalories() {
+    public String getCalories() {
         return calories;
     }
 }
