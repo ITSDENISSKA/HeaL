@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textViewUsername" type="id" />
+    <item name="textViewPassword" type="id" />
+    <item name="fragment_account" type="id" />
+</resources>
