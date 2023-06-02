@@ -1,9 +1,13 @@
 package com.example.heal;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,39 +16,71 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FoodFragment extends Fragment {
     private ArrayList<FoodItem> foodList;
     private FoodListAdapter foodListAdapter;
     private SharedPreferences sharedPreferences;
+    FirebaseAuth auth;
+    FirebaseUser user;
+    String data;
+    String[] oldData;
+    ListView listViewFood;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences = requireContext().getSharedPreferences("FoodPreferences", Context.MODE_PRIVATE);
-        foodList = loadFoodListFromSharedPreferences();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food, container, false);
-        ListView listViewFood = view.findViewById(R.id.listViewFood);
+        listViewFood = view.findViewById(R.id.listViewFood);
         foodListAdapter = new FoodListAdapter(requireContext(), foodList);
         listViewFood.setAdapter(foodListAdapter);
 
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
 
         listViewFood.setOnItemClickListener((adapterView, view1, position, id) -> {
-            foodList.remove(position);
-            foodListAdapter.notifyDataSetChanged();
-            saveFoodListToSharedPreferences();
+            Log.e(TAG, String.valueOf(foodList));
+            if (user == null) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+            } else {
+                oldData = user.getDisplayName().split(";");
+                data = oldData[0] + ";" + oldData[1] + ";" + oldData[2] + ";" +
+                        (Float.parseFloat(oldData[3]) - Float.parseFloat(String
+                                .valueOf(foodList.get(position).getCalories())));
+
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(data)
+                        .build();
+
+                user.updateProfile(profileUpdates)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "User profile updated.");
+                                }
+                            }
+                        });
+                foodList.remove(position);
+                foodListAdapter.notifyDataSetChanged();
+            }
         });
 
         EditText editTextFoodName = view.findViewById(R.id.editTextFoodName);
@@ -54,53 +90,47 @@ public class FoodFragment extends Fragment {
         addButton.setOnClickListener(v -> {
             String foodName = editTextFoodName.getText().toString().trim();
             String calories = editTextCalories.getText().toString().trim();
+
             if (TextUtils.isEmpty(foodName) || TextUtils.isEmpty(calories)) {
                 Toast.makeText(requireContext(), "Введите продукт и калорийность", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             FoodItem foodItem = new FoodItem(foodName, calories);
+
             foodList.add(foodItem);
+
+
+            if (user == null) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+            } else {
+                oldData = user.getDisplayName().split(";");
+                data = oldData[0] + ";" + oldData[1] + ";" + oldData[2] + ";" +
+                        (Float.parseFloat(oldData[3]) + Float.parseFloat(String
+                                .valueOf(editTextCalories.getText())));
+
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName(data)
+                        .build();
+
+                user.updateProfile(profileUpdates)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "User profile updated.");
+                                }
+                            }
+                        });
+
+            }
             editTextFoodName.setText("");
             editTextCalories.setText("");
             foodListAdapter.notifyDataSetChanged();
-            saveFoodListToSharedPreferences();
         });
 
         return view;
-    }
-
-    private void saveFoodListToSharedPreferences() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        JSONArray jsonArray = new JSONArray();
-        for (FoodItem foodItem : foodList) {
-            try {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("name", foodItem.getName());
-                jsonObject.put("calories", foodItem.getCalories());
-                jsonArray.put(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        editor.putString("foodList", jsonArray.toString());
-        editor.apply();
-    }
-
-    private ArrayList<FoodItem> loadFoodListFromSharedPreferences() {
-        String json = sharedPreferences.getString("foodList", "");
-        ArrayList<FoodItem> foodList = new ArrayList<>();
-        try {
-            JSONArray jsonArray = new JSONArray(json);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String name = jsonObject.getString("name");
-                String calories = jsonObject.getString("calories");
-                foodList.add(new FoodItem(name, calories));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return foodList;
     }
 }

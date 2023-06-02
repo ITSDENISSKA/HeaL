@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.util.Objects;
+
 // AccountFragment.java
 public class AccountFragment extends Fragment {
 
@@ -53,10 +55,11 @@ public class AccountFragment extends Fragment {
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
         } else {
+            Log.e(TAG, user.getDisplayName());
             textViewEmail.setText(user.getEmail());
-//            textViewName.setText(Objects.requireNonNull(user.getDisplayName()).split("$+$")[0]);
-//            editTextSpent.setText(Objects.requireNonNull(user.getDisplayName()).split("$+$")[1]);
-//            editTextDial.setText(Objects.requireNonNull(user.getDisplayName()).split("$+$")[2]);
+            textViewName.setText(Objects.requireNonNull(user.getDisplayName()).split(";")[0]);
+            editTextSpent.setText(Objects.requireNonNull(user.getDisplayName()).split(";")[1]);
+            editTextDial.setText(Objects.requireNonNull(user.getDisplayName()).split(";")[2]);
         }
 
         textViewName.setOnClickListener(new View.OnClickListener() {
@@ -158,11 +161,11 @@ public class AccountFragment extends Fragment {
 
                 oldData = user.getDisplayName();
 
-                data = textViewName.getText().toString() + "$+$" + editTextSpent.getText().toString()
-                        + "$+$" + editTextDial.getText().toString() + "$+$" + oldData.split("$+$")[3];
+                data = textViewName.getText().toString() + ";" + editTextSpent.getText().toString()
+                        + ";" + editTextDial.getText().toString() + ";" + oldData.split(";")[3];
 
                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(textViewName.getText().toString())
+                        .setDisplayName(data)
                         .build();
 
                 user.updateProfile(profileUpdates)

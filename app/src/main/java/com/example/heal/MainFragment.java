@@ -63,9 +63,9 @@ public class MainFragment extends Fragment {
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
         } else {
-            if (!Objects.requireNonNull(user.getDisplayName()).contains("$+$")) {
+            if (!Objects.requireNonNull(user.getDisplayName()).contains(";")) {
                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName("Нажмите чтобы изменить имя!$+$1000$+$1000$+$0")
+                        .setDisplayName("Ваше имя;1000;1000;0")
                         .build();
 
                 user.updateProfile(profileUpdates)
@@ -105,18 +105,8 @@ public class MainFragment extends Fragment {
                 .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
                 .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-                // Добавьте другие типы данных, которые вам нужны
                 .build();
 
-//        GoogleSignInAccount account = ;
-//
-//        if (!GoogleSignIn.hasPermissions(account, fitnessOptions)) {
-//            GoogleSignIn.requestPermissions(
-//                    getActivity(),
-//                    1,
-//                    account,
-//                    fitnessOptions);
-//        }
 
         Task<DataReadResponse> responseTask = Fitness.getHistoryClient(requireContext(),
                 GoogleSignIn.getAccountForExtension(getActivity(), fitnessOptions))
