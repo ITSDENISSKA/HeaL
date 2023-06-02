@@ -28,7 +28,7 @@
         android:layout_height="60dp"
         android:layout_x="0dp"
         android:layout_y="670dp"
-        android:background="@color/pink"
+        android:background="@color/menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.666"
