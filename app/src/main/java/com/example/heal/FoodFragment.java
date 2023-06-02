@@ -47,6 +47,7 @@ public class FoodFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food, container, false);
         listViewFood = view.findViewById(R.id.listViewFood);
+        foodList = new ArrayList<>();
         foodListAdapter = new FoodListAdapter(requireContext(), foodList);
         listViewFood.setAdapter(foodListAdapter);
 

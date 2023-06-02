@@ -51,6 +51,8 @@ public class MainFragment extends Fragment {
     int mobilitySpent;
     int mobilityStill;
 
+    Float dialSpent, dialStill;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
@@ -109,7 +111,7 @@ public class MainFragment extends Fragment {
 
 
         Task<DataReadResponse> responseTask = Fitness.getHistoryClient(requireContext(),
-                GoogleSignIn.getAccountForExtension(getActivity(), fitnessOptions))
+                        GoogleSignIn.getAccountForExtension(getActivity(), fitnessOptions))
                 .readData(request);
 
         responseTask.addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {
@@ -162,13 +164,21 @@ public class MainFragment extends Fragment {
             }
         });
 
+        if (user == null) {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        } else {
+            dialSpent = Float.valueOf((Objects.requireNonNull(user.getDisplayName())).split(";")[3]);
+            dialStill = Float.parseFloat((user.getDisplayName()).split(";")[2]) -
+                    Float.parseFloat((user.getDisplayName()).split(";")[3]);
+        }
 
         PieChart receivePieChart = view.findViewById(R.id.receive_pie_chart);
         receivePieChart.setDragDecelerationFrictionCoef(1f);
 
         ArrayList<PieEntry> receiveEntries = new ArrayList<>();
-        receiveEntries.add(new PieEntry(60f, "Приобрёл"));
-        receiveEntries.add(new PieEntry(40f, "Осталось"));
+        receiveEntries.add(new PieEntry(dialSpent, "Приобрёл"));
+        receiveEntries.add(new PieEntry(dialStill, "Осталось"));
 
         PieDataSet receiveDataSet = new PieDataSet(receiveEntries, "Label");
         receiveDataSet.setSliceSpace(5f);

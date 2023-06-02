@@ -42,7 +42,6 @@ public class AccountFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
-        auth = FirebaseAuth.getInstance();
         buttonLogout = view.findViewById(R.id.btn_logout);
         buttonSave = view.findViewById(R.id.btn_save);
         textViewEmail = view.findViewById(R.id.email);
@@ -50,6 +49,7 @@ public class AccountFragment extends Fragment {
         editTextSpent = view.findViewById(R.id.edit_spend);
         editTextDial = view.findViewById(R.id.edit_dial);
 
+        auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         if (user == null) {
             Intent intent = new Intent(getContext(), LoginActivity.class);
