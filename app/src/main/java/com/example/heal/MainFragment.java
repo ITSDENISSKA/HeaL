@@ -1,11 +1,16 @@
 package com.example.heal;
 
+import static android.content.ContentValues.TAG;
+
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -15,14 +20,19 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,7 +43,11 @@ import java.util.concurrent.TimeUnit;
 
 public class MainFragment extends Fragment {
     int mobilityDesire = 1000;
-    int mobilityCalories;
+    FirebaseAuth auth;
+
+    FirebaseUser user;
+
+    int mobilityCalories = 0;
     int mobilitySpent;
     int mobilityStill;
 
@@ -41,7 +55,30 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mobilityCalories = 0;
+        auth = FirebaseAuth.getInstance();
+
+        user = auth.getCurrentUser();
+        if (user == null) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        } else {
+            if (!Objects.requireNonNull(user.getDisplayName()).contains("$+$")) {
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName("Нажмите чтобы изменить имя!$+$1000$+$1000$+$0")
+                        .build();
+
+                user.updateProfile(profileUpdates)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "User profile updated.");
+                                }
+                            }
+                        });
+            }
+        }
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -64,8 +101,25 @@ public class MainFragment extends Fragment {
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .build();
 
+        FitnessOptions fitnessOptions = FitnessOptions.builder()
+                .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+                .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+                // Добавьте другие типы данных, которые вам нужны
+                .build();
+
+//        GoogleSignInAccount account = ;
+//
+//        if (!GoogleSignIn.hasPermissions(account, fitnessOptions)) {
+//            GoogleSignIn.requestPermissions(
+//                    getActivity(),
+//                    1,
+//                    account,
+//                    fitnessOptions);
+//        }
+
         Task<DataReadResponse> responseTask = Fitness.getHistoryClient(requireContext(),
-                        Objects.requireNonNull(GoogleSignIn.getLastSignedInAccount(requireContext())))
+                GoogleSignIn.getAccountForExtension(getActivity(), fitnessOptions))
                 .readData(request);
 
         responseTask.addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {

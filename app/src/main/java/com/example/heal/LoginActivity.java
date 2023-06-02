@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
 
     TextInputEditText editTextEmail, editTextPassword;
-    Button buttonLogin;
+    Button buttonLogin, buttonLoginGoogle;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
@@ -96,5 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                         });
             }
         });
+
     }
 }

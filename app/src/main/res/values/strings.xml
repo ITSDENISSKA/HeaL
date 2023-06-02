@@ -22,4 +22,14 @@
     <string name="register_account">Register account</string>
     <string name="click_to_login">Click to login</string>
     <string name="click_to_register">Click to register</string>
+    <string name="fotiev_d1991_gmail_com">fotiev.d1991@gmail.com</string>
+    <string name="денис_фотиев">Денис Фотиев</string>
+    <string name="сжигать">Сжигать:</string>
+    <string name="набирать">Набирать:</string>
+    <string name="справка">Справка</string>
+    <string name="сохранить">Сохранить</string>
+    <string name="тратить">тратить</string>
+    <string name="тратить1">Тратить:</string>
+    <string name="_1000">1000</string>
+    <string name="quit">Выйти из аккаунта</string>
 </resources>
