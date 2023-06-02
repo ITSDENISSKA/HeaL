@@ -1,30 +1,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background_light">
+    android:background="@color/background_light"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/editTextFoodName"
+        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Food Name"
+        android:hint="Название продукта"
         android:inputType="text" />
 
     <EditText
         android:id="@+id/editTextCalories"
+        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Calories"
+        android:hint="Калорийность"
         android:inputType="number"
         android:minHeight="48dp" />
 
     <Button
         android:id="@+id/buttonAdd"
+        style="@style/Widget.Material3.Button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:layout_gravity="center"
-        android:text="Add Food" />
+        android:backgroundTintMode="screen"
+        android:insetLeft="10dp"
+        android:insetRight="10dp"
+        android:text="Добавить"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:icon="@drawable/free_icon_font_plus_3917757"
+        app:iconPadding="-20dp" />
 
     <ListView
         android:id="@+id/listViewFood"
