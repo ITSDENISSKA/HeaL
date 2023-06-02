@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#FF1100</color>
     <color name="pink">#FFBFBA</color>
+    <color name="menu">#6ACD81</color>
+    <color name="background_light">#FCFAF7</color>
 </resources>
