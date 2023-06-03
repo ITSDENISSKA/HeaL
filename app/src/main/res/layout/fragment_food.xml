@@ -1,5 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_light"
@@ -7,20 +8,37 @@
 
     <EditText
         android:id="@+id/editTextFoodName"
-        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox"
-        android:layout_width="match_parent"
+        style="@android:style/Widget.AutoCompleteTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="10dp"
+        android:autofillHints=""
         android:hint="Название продукта"
-        android:inputType="text" />
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextCalories"
-        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox"
-        android:layout_width="match_parent"
+        style="@android:style/Widget.AutoCompleteTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
         android:hint="Калорийность"
         android:inputType="number"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextFoodName" />
 
     <Button
         android:id="@+id/buttonAdd"
@@ -28,21 +46,51 @@
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_gravity="center"
+        android:layout_marginTop="15dp"
         android:backgroundTintMode="screen"
         android:insetLeft="10dp"
         android:insetRight="10dp"
         android:text="Добавить"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="20sp"
         app:icon="@drawable/free_icon_font_plus_3917757"
-        app:iconPadding="-20dp" />
+        app:iconPadding="-20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCalories"
+        app:layout_constraintVertical_bias="0.011"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-9dp" />
 
     <ListView
         android:id="@+id/listViewFood"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
         android:layout_weight="1"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:listSelector="@android:color/transparent" />
+        android:listSelector="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAdd"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Съеденные продукты:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/listViewFood"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAdd" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

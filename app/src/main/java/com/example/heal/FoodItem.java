@@ -14,6 +14,23 @@ public class FoodItem implements Parcelable {
         this.calories = calories;
     }
 
+    protected FoodItem(Parcel in) {
+        name = in.readString();
+        calories = in.readString();
+    }
+
+    public static final Creator<FoodItem> CREATOR = new Creator<FoodItem>() {
+        @Override
+        public FoodItem createFromParcel(Parcel in) {
+            return new FoodItem(in);
+        }
+
+        @Override
+        public FoodItem[] newArray(int size) {
+            return new FoodItem[size];
+        }
+    };
+
     public String getName() {
         return name;
     }
@@ -29,6 +46,7 @@ public class FoodItem implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-
+        dest.writeString(name);
+        dest.writeString(calories);
     }
 }

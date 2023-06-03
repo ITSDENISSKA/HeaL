@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -177,6 +178,18 @@ public class AccountFragment extends Fragment {
                                 }
                             }
                         });
+            }
+        });
+        Button helpButton = view.findViewById(R.id.btn_help);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SertificateFragment sertificateFragment = new SertificateFragment();
+                AppCompatActivity activity = (AppCompatActivity) requireActivity();
+
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, sertificateFragment)
+                        .commit();
             }
         });
 
