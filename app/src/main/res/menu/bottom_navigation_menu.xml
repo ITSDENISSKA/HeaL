@@ -8,8 +8,9 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/free_icon_font_chart_pie_alt_5528076" />
-
+        android:icon="@drawable/free_icon_font_chart_pie_alt_5528076"
+        android:checked="true"
+        android:title="" />
     <item
         android:id="@+id/nav_account"
         android:icon="@drawable/free_icon_font_user_3917796"

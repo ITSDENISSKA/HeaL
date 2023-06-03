@@ -1,8 +1,11 @@
 package com.example.heal;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,6 +120,7 @@ public class MainFragment extends Fragment {
                     for (DataSet dataSet : dataReadResponse.getDataSets()) {
                         List<DataPoint> dataPoints = dataSet.getDataPoints();
                         for (DataPoint dataPoint : dataPoints) {
+                            Log.e(TAG, String.valueOf(dataPoint));
                             if (String.valueOf(dataPoint).contains("from_user_input_activities_local")) {
                                 mobilityCalories += (int) dataPoint.getValue(Field.FIELD_CALORIES).asFloat();
                             }
@@ -139,7 +143,7 @@ public class MainFragment extends Fragment {
                     mobilityDataSet.setValueTextSize(12f);
                     mobilityDataSet.setValueTextColor(Color.TRANSPARENT);
 
-                    int[] mobilityColor = {Color.rgb(170, 51, 78), Color.rgb(233, 157, 174)};
+                    int[] mobilityColor = {Color.rgb(170, 51, 78), Color.rgb(255, 255, 255)};
 
                     mobilityDataSet.setColors(mobilityColor);
 
@@ -159,6 +163,41 @@ public class MainFragment extends Fragment {
                 }
             }
         });
+
+        ArrayList<PieEntry> mobilityEntries = new ArrayList<>();
+
+        PieChart mobilityPieChart = view.findViewById(R.id.mobility_pie_chart);
+        mobilityPieChart.setDragDecelerationFrictionCoef(1f);
+
+        mobilitySpent = mobilityCalories;
+        mobilityStill = (mobilityDesire - mobilityCalories);
+
+        mobilityEntries.add(new PieEntry((float) 20, "Потрачено"));
+        mobilityEntries.add(new PieEntry((float) 30, "Осталось"));
+
+        PieDataSet mobilityDataSet = new PieDataSet(mobilityEntries, "Label");
+        mobilityDataSet.setSliceSpace(5f);
+        mobilityDataSet.setSelectionShift(0f);
+        mobilityDataSet.setValueTextSize(12f);
+        mobilityDataSet.setValueTextColor(Color.TRANSPARENT);
+
+        int[] mobilityColor = {Color.rgb(170, 51, 78), Color.rgb(255, 255, 255)};
+
+        mobilityDataSet.setColors(mobilityColor);
+
+        PieData mobilityData = new PieData(mobilityDataSet);
+
+        mobilityPieChart.setData(mobilityData);
+        mobilityPieChart.setUsePercentValues(false);
+        mobilityPieChart.setHoleRadius(75f);
+        mobilityPieChart.setTransparentCircleRadius(100f);
+        mobilityPieChart.getDescription().setEnabled(false);
+        mobilityPieChart.setDrawEntryLabels(false);
+        mobilityPieChart.getLegend().setEnabled(false);
+        mobilityPieChart.setEntryLabelTextSize(20f);
+        mobilityPieChart.setDrawCenterText(true);
+        mobilityPieChart.setCenterTextSize(50f);
+        mobilityPieChart.animateY(1500, Easing.EaseInOutQuad);
 
         if (user == null) {
             Intent intent = new Intent(getContext(), LoginActivity.class);
@@ -196,7 +235,7 @@ public class MainFragment extends Fragment {
 
         receiveDataSet.setValueTextSize(12f);
         receiveDataSet.setValueTextColor(Color.TRANSPARENT);
-        int[] receiveColor = {Color.rgb(0, 150, 0), Color.rgb(0, 255, 0)};
+        int[] receiveColor = {Color.rgb(0, 255, 0), Color.rgb(255, 255, 255)};
 
         receiveDataSet.setColors(receiveColor);
 

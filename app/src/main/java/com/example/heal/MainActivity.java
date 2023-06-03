@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, mainFragment)
                 .commit();
         selectedNavItem = R.id.nav_home;
-
+        bottomNavigationView.setSelectedItemId(selectedNavItem);
         if (savedInstanceState != null) {
             selectedNavItem = savedInstanceState.getInt("selectedNavItem", R.id.nav_home);
             bottomNavigationView.setSelectedItemId(selectedNavItem);

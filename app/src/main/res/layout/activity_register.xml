@@ -73,7 +73,7 @@
 
     <Button
         android:id="@+id/btn_register"
-        android:layout_width="212dp"
+        android:layout_width="wrap_content"
         android:layout_height="61dp"
         android:text="Зарегистрироваться"
         android:textSize="16sp"
