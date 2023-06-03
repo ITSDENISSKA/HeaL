@@ -18,10 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-
-import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,30 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            if (currentUser.getDisplayName() == null) {
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName("Ваше имя;1000;1000;0")
-                        .build();
-
-                currentUser.updateProfile(profileUpdates);
-            } else if (!Objects.requireNonNull(currentUser.getDisplayName()).contains(";")) {
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName("Ваше имя;1000;1000;0")
-                        .build();
-
-                currentUser.updateProfile(profileUpdates);
-            }
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
 
 
     @Override

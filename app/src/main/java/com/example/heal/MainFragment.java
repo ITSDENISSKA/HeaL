@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,6 +47,28 @@ public class MainFragment extends Fragment {
     int mobilityStill;
 
     Float dialSpent, dialStill;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            if (currentUser.getDisplayName() == null) {
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName("Ваше имя;1000;1000;0")
+                        .build();
+
+                currentUser.updateProfile(profileUpdates);
+            } else if (!Objects.requireNonNull(currentUser.getDisplayName()).contains(";")) {
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName("Ваше имя;1000;1000;0")
+                        .build();
+
+                currentUser.updateProfile(profileUpdates);
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -142,6 +165,19 @@ public class MainFragment extends Fragment {
             startActivity(intent);
             auth.signOut();
         } else {
+            if (user.getDisplayName() == null) {
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName("Ваше имя;1000;1000;0")
+                        .build();
+
+                user.updateProfile(profileUpdates);
+            } else if (!Objects.requireNonNull(user.getDisplayName().toString()).contains(";")) {
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName("Ваше имя;1000;1000;0")
+                        .build();
+
+                user.updateProfile(profileUpdates);
+            }
             dialSpent = Float.valueOf((Objects.requireNonNull(user.getDisplayName())).split(";")[3]);
             dialStill = Float.parseFloat((user.getDisplayName()).split(";")[2]) -
                     Float.parseFloat((user.getDisplayName()).split(";")[3]);

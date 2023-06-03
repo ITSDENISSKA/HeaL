@@ -84,6 +84,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(RegisterActivity.this, "Account created.",
                                             Toast.LENGTH_SHORT).show();
+                                    mAuth.signOut();
+
                                 } else {
                                     Toast.makeText(RegisterActivity.this, "Ошибка при создании",
                                             Toast.LENGTH_SHORT).show();
@@ -93,6 +95,5 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
-        mAuth.signOut();
     }
 }

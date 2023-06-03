@@ -56,7 +56,13 @@ public class AccountFragment extends Fragment {
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
         } else {
-            Log.e(TAG, user.getDisplayName());
+            if (!Objects.requireNonNull(user.getDisplayName()).contains(";")) {
+                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                        .setDisplayName("Ваше имя;1000;1000;0")
+                        .build();
+
+                user.updateProfile(profileUpdates);
+            }
             textViewEmail.setText(user.getEmail());
             textViewName.setText(Objects.requireNonNull(user.getDisplayName()).split(";")[0]);
             editTextSpent.setText(Objects.requireNonNull(user.getDisplayName()).split(";")[1]);
