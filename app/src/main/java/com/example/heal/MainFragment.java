@@ -1,16 +1,12 @@
 package com.example.heal;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -27,12 +23,10 @@ import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,27 +54,6 @@ public class MainFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
 
         user = auth.getCurrentUser();
-        if (user == null) {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(getContext(), LoginActivity.class);
-            startActivity(intent);
-        } else {
-            if (!Objects.requireNonNull(user.getDisplayName()).contains(";")) {
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName("Ваше имя;1000;1000;0")
-                        .build();
-
-                user.updateProfile(profileUpdates)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d(TAG, "User profile updated.");
-                                }
-                            }
-                        });
-            }
-        }
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -167,6 +140,7 @@ public class MainFragment extends Fragment {
         if (user == null) {
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
+            auth.signOut();
         } else {
             dialSpent = Float.valueOf((Objects.requireNonNull(user.getDisplayName())).split(";")[3]);
             dialStill = Float.parseFloat((user.getDisplayName()).split(";")[2]) -
