@@ -52,7 +52,6 @@ public class RegisterActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -68,11 +67,11 @@ public class RegisterActivity extends AppCompatActivity {
                 password = String.valueOf(editTextPassword.getText());
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(RegisterActivity.this, "Enter email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Введите логин", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(RegisterActivity.this, "Enter password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Введите пароль", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -82,12 +81,10 @@ public class RegisterActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(RegisterActivity.this, "Account created.",
+                                    Toast.makeText(RegisterActivity.this, "Аккаунт создан",
                                             Toast.LENGTH_SHORT).show();
-                                    mAuth.signOut();
-
                                 } else {
-                                    Toast.makeText(RegisterActivity.this, "Ошибка при создании",
+                                    Toast.makeText(RegisterActivity.this, "Ошибка при создании аккаунта",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
